@@ -1,14 +1,14 @@
 import React, { useRef, useEffect } from 'react';
 import { render } from 'react-dom';
-import PointMass from './PointMass';
+import Solitaire from './Solitaire';
 
 const Example = () => {
 
   const containerEl = useRef();
 
   useEffect(() => {
-    let mass = new PointMass();
-    
+    let demo = new Solitaire();
+
   }, []);
 
   return (
