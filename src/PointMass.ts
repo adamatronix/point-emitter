@@ -1,15 +1,15 @@
 import { getRandomInt } from './utils/getRandomInt';
 
 interface OptionsObject {
-  gravity: number,
-  velX: any,
-  velY: any,
-  position: PositionObject,
-  boundaries: BoundariesObject,
-  radius: number,
-  colour: any,
-  life: any,
-  array: any
+  gravity?: number,
+  velX?: any,
+  velY?: any,
+  position?: PositionObject,
+  boundaries?: BoundariesObject,
+  radius?: number,
+  colour?: any,
+  life?: any,
+  points?: any
 }
 
 interface PositionObject {
@@ -31,7 +31,7 @@ class PointMass {
   ag:number = 9.81; //9.81 earth's gravity
   restitution:number = -0.7;
   mass:number = 1; // kg
-  position:PositionObject;
+  position:PositionObject = { x: 0, y: 0};
   velocity:PositionObject;
   velX:number = getRandomInt(-10,10);
   velY:number = getRandomInt(-10,10);
@@ -45,11 +45,11 @@ class PointMass {
 
   constructor(options?: OptionsObject) {
 
-    if(options.gravity){
+    if(options && options.gravity){
       this.ag = options.gravity
     }
 
-    if(options.velX){
+    if(options && options.velX){
       if(typeof options.velX === "object"){
         //if there it is an object with two values
         this.velX = getRandomInt(options.velX.min,options.velX.max);
@@ -58,7 +58,7 @@ class PointMass {
       }
     }
 
-    if(options.velY){
+    if(options && options.velY){
       if(typeof options.velY === "object"){
         //if there it is an object with two values
         this.velY = getRandomInt(options.velY.min,options.velY.max);
@@ -67,30 +67,36 @@ class PointMass {
       }
     }
     
-    if(options.boundaries) {
+    if(options && options.boundaries) {
       this.boundaries = options.boundaries;
     }
     
-    if(options.radius) {
+    if(options && options.radius) {
       this.radius = options.radius;
     } 
 
-    if(options.colour) {
+    if(options && options.colour) {
       this.colour = options.colour;
     }
 
-    if(options.life){
+    if(options && options.life){
       this.life = getRandomInt(options.life.min,options.life.max); // in ms;
     }
 
-    this.position = options.position;
+    if(options && options.position) {
+      this.position = options.position;
+    }
+
+    if(options && options.points) {
+      this.pointmasses = options.points;
+    }
+
     this.velocity = { x:this.velX, y:this.velY };
-    this.pointmasses = options.array;
     this.creation_time = Date.now();
 
   }
 
-  update = () => {
+  update = (updateEvent: (position: PositionObject) => void) => {
     // Drag force: Fd = -1/2 * Cd * A * rho * v * v
     let Fx = -0.5 * this.Cd * this.A * this.rho * this.velocity.x * this.velocity.x * this.velocity.x / Math.abs(this.velocity.x);
     let Fy = -0.5 * this.Cd * this.A * this.rho * this.velocity.y * this.velocity.y * this.velocity.y / Math.abs(this.velocity.y);
@@ -104,6 +110,8 @@ class PointMass {
 		this.velocity.y += ay*this.frameRate;
     this.position.x += this.velocity.x*this.frameRate*100;
 		this.position.y += this.velocity.y*this.frameRate*100;
+    this.position.x = Math.round(this.position.x * 100) / 100;
+    this.position.y = Math.round(this.position.y * 100) / 100;
 
     if(this.boundaries) {
       if (this.position.y < this.radius) {
@@ -124,6 +132,8 @@ class PointMass {
         this.position.x = this.radius;
       }
     }
+
+    updateEvent(this.position);
   }
 
   destroy = () => {
