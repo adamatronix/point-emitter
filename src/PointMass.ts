@@ -49,7 +49,7 @@ class PointMass {
       this.ag = options.gravity
     }
 
-    if(options && options.velX){
+    if(options && options.velX !== null){
       if(typeof options.velX === "object"){
         //if there it is an object with two values
         this.velX = getRandomInt(options.velX.min,options.velX.max);
@@ -58,7 +58,7 @@ class PointMass {
       }
     }
 
-    if(options && options.velY){
+    if(options && options.velY !== null){
       if(typeof options.velY === "object"){
         //if there it is an object with two values
         this.velY = getRandomInt(options.velY.min,options.velY.max);
@@ -66,7 +66,7 @@ class PointMass {
         this.velY = options.velY;
       }
     }
-    
+
     if(options && options.boundaries) {
       this.boundaries = options.boundaries;
     }

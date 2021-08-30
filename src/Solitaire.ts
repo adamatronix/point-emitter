@@ -9,7 +9,13 @@ class Solitaire {
 
   constructor(container: HTMLDivElement) {
     this.container = container;
-    this.point = new PointMass({position: {x: 500, y: 0 },points: this.points, frameRate: this.frameRate});
+    this.point = new PointMass({ 
+      velX: 5,
+      velY: 0,
+      position: {x: 700, y: 100 },
+      points: this.points, 
+      frameRate: this.frameRate
+    });
     this.points.push(this.point);
     new P5(this.sketch);
   }
