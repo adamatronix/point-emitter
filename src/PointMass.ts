@@ -31,7 +31,7 @@ class PointMass {
   ag:number = 9.81; //9.81 earth's gravity
   restitution:number = -0.7;
   mass:number = 1; // kg
-  position:PositionObject;
+  position:PositionObject = { x: 0, y: 0};
   velocity:PositionObject;
   velX:number = getRandomInt(-10,10);
   velY:number = getRandomInt(-10,10);
@@ -45,11 +45,11 @@ class PointMass {
 
   constructor(options?: OptionsObject) {
 
-    if(options.gravity){
+    if(options && options.gravity){
       this.ag = options.gravity
     }
 
-    if(options.velX){
+    if(options && options.velX){
       if(typeof options.velX === "object"){
         //if there it is an object with two values
         this.velX = getRandomInt(options.velX.min,options.velX.max);
@@ -58,7 +58,7 @@ class PointMass {
       }
     }
 
-    if(options.velY){
+    if(options && options.velY){
       if(typeof options.velY === "object"){
         //if there it is an object with two values
         this.velY = getRandomInt(options.velY.min,options.velY.max);
@@ -67,25 +67,31 @@ class PointMass {
       }
     }
     
-    if(options.boundaries) {
+    if(options && options.boundaries) {
       this.boundaries = options.boundaries;
     }
     
-    if(options.radius) {
+    if(options && options.radius) {
       this.radius = options.radius;
     } 
 
-    if(options.colour) {
+    if(options && options.colour) {
       this.colour = options.colour;
     }
 
-    if(options.life){
+    if(options && options.life){
       this.life = getRandomInt(options.life.min,options.life.max); // in ms;
     }
 
-    this.position = options.position;
+    if(options && options.position) {
+      this.position = options.position;
+    }
+
+    if(options && options.array) {
+      this.pointmasses = options.array;
+    }
+
     this.velocity = { x:this.velX, y:this.velY };
-    this.pointmasses = options.array;
     this.creation_time = Date.now();
 
   }
