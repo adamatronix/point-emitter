@@ -9,7 +9,8 @@ interface OptionsObject {
   radius?: number,
   colour?: any,
   life?: any,
-  points?: any
+  points?: any,
+  frameRate?:number
 }
 
 interface PositionObject {
@@ -23,7 +24,6 @@ interface BoundariesObject {
 }
 
 class PointMass {
-
   frameRate:number = 1/30;
   Cd:number = 0.47;
   rho:number = 1.22;
@@ -89,6 +89,10 @@ class PointMass {
 
     if(options && options.points) {
       this.pointmasses = options.points;
+    }
+
+    if(options && options.frameRate) {
+      this.frameRate = 1 / options.frameRate;
     }
 
     this.velocity = { x:this.velX, y:this.velY };
