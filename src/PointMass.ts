@@ -9,7 +9,8 @@ interface OptionsObject {
   radius?: number,
   colour?: any,
   life?: any,
-  points?: any
+  points?: any,
+  frameRate?:number
 }
 
 interface PositionObject {
@@ -23,7 +24,6 @@ interface BoundariesObject {
 }
 
 class PointMass {
-
   frameRate:number = 1/30;
   Cd:number = 0.47;
   rho:number = 1.22;
@@ -49,7 +49,7 @@ class PointMass {
       this.ag = options.gravity
     }
 
-    if(options && options.velX){
+    if(options && options.velX !== null){
       if(typeof options.velX === "object"){
         //if there it is an object with two values
         this.velX = getRandomInt(options.velX.min,options.velX.max);
@@ -58,7 +58,7 @@ class PointMass {
       }
     }
 
-    if(options && options.velY){
+    if(options && options.velY !== null){
       if(typeof options.velY === "object"){
         //if there it is an object with two values
         this.velY = getRandomInt(options.velY.min,options.velY.max);
@@ -66,7 +66,7 @@ class PointMass {
         this.velY = options.velY;
       }
     }
-    
+
     if(options && options.boundaries) {
       this.boundaries = options.boundaries;
     }
@@ -89,6 +89,10 @@ class PointMass {
 
     if(options && options.points) {
       this.pointmasses = options.points;
+    }
+
+    if(options && options.frameRate) {
+      this.frameRate = 1 / options.frameRate;
     }
 
     this.velocity = { x:this.velX, y:this.velY };

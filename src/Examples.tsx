@@ -7,7 +7,7 @@ const Example = () => {
   const containerEl = useRef();
 
   useEffect(() => {
-    let demo = new Solitaire();
+    let demo = new Solitaire(containerEl.current);
 
   }, []);
 
