@@ -9,18 +9,12 @@ class Solitaire {
 
   constructor(container: HTMLDivElement) {
     this.container = container;
-    this.point = new PointMass({ 
-      velX: 5,
-      velY: 0,
-      position: {x: 700, y: 100 },
-      points: this.points, 
-      frameRate: this.frameRate
-    });
-    this.points.push(this.point);
+    
     new P5(this.sketch);
   }
 
   sketch = (p5: P5) => {
+    const self = this;
     
     p5.setup = () => {
       const canvas = p5.createCanvas(this.container.offsetWidth, this.container.offsetHeight);
@@ -32,12 +26,27 @@ class Solitaire {
       p5.frameRate(this.frameRate);
     }
 
-    p5.draw = () => {
-      this.points.forEach((point:PointMass) => {
-        point.update((position: any) => {
-          p5.circle(position.x, position.y, 10); 
-        });
+    p5.mousePressed = function () {
+      self.point = new PointMass({ 
+        velX: 5,
+        velY: 0,
+        position: {x: p5.mouseX, y: p5.mouseY },
+        points: self.points,
+        frameRate: self.frameRate,
+        boundaries: { width: self.container.offsetWidth , height: self.container.offsetHeight },
+        radius: {width: 120, height: 200}
       });
+      self.points.push(self.point);
+    }
+
+    p5.draw = () => {
+      if(this.points.length > 0) {
+        this.points.forEach((point:PointMass) => {
+          point.update((position: any) => {
+            p5.rect(position.x, position.y, 120, 200); 
+          });
+        });
+      }
     }
 
   }
