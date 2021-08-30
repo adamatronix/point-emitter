@@ -28,9 +28,9 @@ class Solitaire {
 
     p5.mousePressed = function () {
       self.point = new PointMass({ 
-        velX: 5,
-        velY: 0,
-        position: {x: p5.mouseX, y: p5.mouseY },
+        velX: {min: -5, max: 5},
+        velY: {min: -5, max: 0},
+        position: {x: p5.mouseX, y: p5.mouseY},
         points: self.points,
         frameRate: self.frameRate,
         boundaries: { width: self.container.offsetWidth , height: self.container.offsetHeight },
