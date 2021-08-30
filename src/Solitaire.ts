@@ -33,7 +33,6 @@ class Solitaire {
     }
 
     p5.draw = () => {
-      p5.clear();
       this.points.forEach((point:PointMass) => {
         point.update((position: any) => {
           p5.circle(position.x, position.y, 10); 
