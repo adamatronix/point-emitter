@@ -6,7 +6,7 @@ interface OptionsObject {
   velY?: any,
   position?: PositionObject,
   boundaries?: BoundariesObject,
-  radius?: number,
+  radius?: BoundariesObject,
   colour?: any,
   life?: any,
   points?: any,
@@ -36,7 +36,7 @@ class PointMass {
   velX:number = getRandomInt(-10,10);
   velY:number = getRandomInt(-10,10);
   boundaries:BoundariesObject;
-  radius:number = 8;
+  radius:BoundariesObject = { width: 0, height: 0};
   colour:any = [255,75,40];
   life:number = getRandomInt(500,2000);
   pointmasses:any;
@@ -109,7 +109,7 @@ class PointMass {
 
     // Calculate acceleration ( F = ma )
     let ax = Fx / this.mass;
-    let ay = this.ag + (Fy / this.mass);
+    let ay = Fy / this.mass;
     this.velocity.x += ax*this.frameRate;
 		this.velocity.y += ay*this.frameRate;
     this.position.x += this.velocity.x*this.frameRate*100;
@@ -118,22 +118,22 @@ class PointMass {
     this.position.y = Math.round(this.position.y * 100) / 100;
 
     if(this.boundaries) {
-      if (this.position.y < this.radius) {
+      if (this.position.y < 0) {
         this.velocity.y *= this.restitution;
-        this.position.y = this.radius;
+        this.position.y = 0;
         
       }
-      if (this.position.y > this.boundaries.height - this.radius) {
+      if (this.position.y > this.boundaries.height - this.radius.height) {
         this.velocity.y *= this.restitution;
-        this.position.y = this.boundaries.height - this.radius;
+        this.position.y = this.boundaries.height - this.radius.height;
       }
-      if (this.position.x > this.boundaries.width - this.radius) {
+      if (this.position.x > this.boundaries.width - this.radius.width) {
         this.velocity.x *= this.restitution;
-        this.position.x = this.boundaries.width - this.radius;
+        this.position.x = this.boundaries.width - this.radius.width;
       }
-      if (this.position.x < this.radius) {
+      if (this.position.x < 0) {
         this.velocity.x *= this.restitution;
-        this.position.x = this.radius;
+        this.position.x = 0;
       }
     }
 
