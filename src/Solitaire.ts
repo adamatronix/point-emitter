@@ -2,7 +2,7 @@ import * as P5 from 'p5';
 import PointMass from "./PointMass";
 
 class Solitaire {
-  frameRate:number = 60;
+  frameRate:number = 100;
   point:PointMass;
   points:any = Array();
   container:HTMLDivElement;
