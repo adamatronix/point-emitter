@@ -1,5 +1,6 @@
 import * as P5 from 'p5';
 import PointMass from "./PointMass";
+import { hasCollided } from './utils/hasCollided';
 
 class Solitaire {
   frameRate:number = 100;
@@ -41,9 +42,51 @@ class Solitaire {
 
     p5.draw = () => {
       if(this.points.length > 0) {
-        this.points.forEach((point:PointMass) => {
+        this.points.forEach((point:PointMass, pointIndex:number) => {
           point.update((position: any) => {
-            p5.rect(position.x, position.y, 120, 200); 
+            p5.rect(position.x, position.y, point.radius.width, point.radius.height); 
+            let pointMod = {
+              x: position.x,
+              y: position.y,
+              h: point.radius.height,
+              w: point.radius.width
+            }
+
+            //detect other points for collision effects
+            this.points.forEach((other:PointMass, otherIndex:number) => {
+              if(pointIndex !== otherIndex) {
+                let otherMod = {
+                  x: other.position.x,
+                  y: other.position.y,
+                  h: other.radius.height,
+                  w: other.radius.width
+                }
+
+                let collision = hasCollided(pointMod,otherMod);
+
+                if(collision === 'top') {
+                  point.velocity.y *= point.restitution;
+                  point.position.y = other.position.y - point.radius.height;
+                }
+
+                if(collision === 'bottom') {
+                  point.velocity.y *= point.restitution;
+                  point.position.y = other.position.y + other.radius.height;
+                }
+
+                if(collision === 'left') {
+                  point.velocity.x *= point.restitution;
+                  point.position.x = other.position.x - point.radius.width;
+                }
+
+                if(collision === 'right') {
+                  point.velocity.x *= point.restitution;
+                  point.position.x = other.position.x + other.radius.width;
+                }
+
+              }
+            });
+
           });
         });
       }
