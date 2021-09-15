@@ -109,7 +109,7 @@ class PointMass {
 
     // Calculate acceleration ( F = ma )
     let ax = Fx / this.mass;
-    let ay = Fy / this.mass;
+    let ay = this.ag + (Fy / this.mass);
     this.velocity.x += ax*this.frameRate;
 		this.velocity.y += ay*this.frameRate;
     this.position.x += this.velocity.x*this.frameRate*100;
@@ -120,7 +120,7 @@ class PointMass {
     if(this.boundaries) {
       if (this.position.y < 0) {
         this.velocity.y *= this.restitution;
-        this.position.y = 0;
+        this.position.y = this.radius.height;
         
       }
       if (this.position.y > this.boundaries.height - this.radius.height) {
